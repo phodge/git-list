@@ -2,6 +2,7 @@
 import json
 import os.path
 import subprocess
+from typing import List
 
 import click
 import git
@@ -12,7 +13,7 @@ DEFAULT_CONFIG = {
     # names of branches that should never be cleaned up
     'permanent_branches': ['master'],
     # whether local refs should be created for each permanent branch
-    'always_create_permanent_branches': False,
+    'always_create_permanent_branches': True,
     # whether to do a git fetch first
     'fetch_first': True,
     # whether to use --tags option when fetching
@@ -79,6 +80,38 @@ def _get_refs():
 
 def _do_fast_forward(repo, name, remote, mustExist=True):
     raise Exception("TODO: not complete")  # noqa
+
+
+def _createPermanent(repo: git.Repo, name: str, remotes: List[str]) -> None:
+    def _err(msg):
+        click.secho("WARNING: Can't create permanent branch {}: {}".format(name, msg),
+                    fg='red')
+
+    click.secho('Creating permanent branch {}'.format(name), fg='green', dim=True)
+
+    if not remotes:
+        _err("No remotes configured")
+        return
+
+    # work out which remote(s) have the branch we want
+    candidateRemotes = [
+        r for r in repo.remotes
+        if r.name in remotes
+        and any(ref.name == '{}/{}'.format(r.name, name) for ref in r.refs)
+    ]
+
+    if not len(candidateRemotes):
+        _err("No remotes configured, or no remotes have branch {}".format(name))
+        return
+
+    if len(candidateRemotes) > 1:
+        _err("Multiple remotes have a {} branch".format(name))
+        return
+
+    remote = candidateRemotes[0]
+
+    # create the branch
+    repo.git.branch('--track', name, '{}/{}'.format(remote.name, name))
 
 
 def _examine_branch(repo, head, remotes, permanent):
@@ -219,7 +252,9 @@ def main(fetch, permanent, remote):
 
     # 2) create permanent branches if needed
     if conf['always_create_permanent_branches']:
-        raise Exception("TODO: create permanent branches if they don't exist")  # noqa
+        for name in permanent:
+            if not hasattr(repo.heads, name):
+                _createPermanent(repo, name, remotes)
 
     # 3) auto-fast forward any branches that need fastforwarding
     if conf['auto_fast_forward'] in ('ff_permanent', 'ff_all'):

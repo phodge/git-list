@@ -11,7 +11,7 @@ CONFIG_PATH = os.getenv('HOME') + '/.config/git-lost.json'
 
 DEFAULT_CONFIG = {
     # names of branches that should never be cleaned up
-    'permanent_branches': ['master'],
+    'permanent_branches': ['master', 'main'],
     # whether local refs should be created for each permanent branch
     'always_create_permanent_branches': True,
     # whether to do a git fetch first

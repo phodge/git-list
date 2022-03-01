@@ -4,6 +4,9 @@ version = "1.0.0"
 description = "Interactively delete local git branches that have been merged."
 authors = ["Peter Hodge <peter.hodge84@gmail.com>"]
 license = "MIT"
+packages = [
+    { include = "gitlostapi" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"

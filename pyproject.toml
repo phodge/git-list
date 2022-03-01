@@ -8,6 +8,9 @@ packages = [
     { include = "gitlostapi" },
 ]
 
+[tool.poetry.scripts]
+git-lost = 'gitlostapi:cli'
+
 [tool.poetry.dependencies]
 python = "^3.9"
 GitPython = "^3.1.27"

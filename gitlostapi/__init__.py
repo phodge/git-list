@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import json
 import os.path
 import subprocess
@@ -213,7 +212,7 @@ def _request_removal(repo, head, othername, defaultJump):
 @click.option('-f/-F', '--fetch/--no-fetch', is_flag=True, default=None)
 @click.option('-p', '--permanent', multiple=True)
 @click.argument('remote', nargs=-1)
-def main(fetch, permanent, remote):
+def cli(fetch, permanent, remote):
     # get branch list
     repo = git.Repo()
     local, remote, _ = _get_refs()
@@ -279,4 +278,4 @@ def main(fetch, permanent, remote):
 
 
 if __name__ == '__main__':
-    main()
+    cli()

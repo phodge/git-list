@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "git-lost"
+version = "1.0.0"
+description = "Interactively delete local git branches that have been merged."
+authors = ["Peter Hodge <peter.hodge84@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+GitPython = "^3.1.27"
+click = "^8.0.4"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+mypy = "^0.931"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

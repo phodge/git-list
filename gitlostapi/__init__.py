@@ -1,4 +1,5 @@
 import json
+import os
 import os.path
 import subprocess
 from typing import List
@@ -6,7 +7,7 @@ from typing import List
 import click
 import git
 
-CONFIG_PATH = os.getenv('HOME') + '/.config/git-lost.json'
+CONFIG_PATH = os.getenv('HOME', '') + '/.config/git-lost.json'
 
 DEFAULT_CONFIG = {
     # names of branches that should never be cleaned up
